@@ -1,5 +1,7 @@
 package ui;
 
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -10,8 +12,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
-import javax.swing.JFileChooser;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -21,7 +23,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 /**
- * Clase para el estructurado de la interfaz
+ * Interfaz de Bloc de notas basico
+ * 
+ * @version 1.0
+ * fecha 28/8/2016
  * 
  * @author Pablo Daniel Quiroga
  */
@@ -51,6 +56,7 @@ public class Ventana {
     /**
      * Metodo para inicializar componentes
      */
+    @SuppressWarnings("Convert2Lambda")
     private void initComponents(){
     	//inicializa los elementos
         window = new JFrame();
@@ -146,7 +152,12 @@ public class Ventana {
     /**
      * metodos para el manejo de eventos
      */
-    private boolean descartar(){//comprueba contenido y ofrece descartar
+    
+    /**
+     * Comprueba contenido y ofrece descartar
+     * @return boolean
+     */
+    private boolean descartar(){
         boolean opcion;
         boolean contiene = !area.getText().isEmpty();
         if(contiene){
@@ -162,15 +173,20 @@ public class Ventana {
         return opcion;
     }
     
-    private void nuevo(){//limpia entorno
+    /**
+     * Comprueba y limpia entorno
+     */
+    private void nuevo(){
         if(descartar()){
             area.setText("");
             nameFile = "Nuevo";
             window.setTitle(titulo + " - " + nameFile);
         }
     }
-    
-    private void abrir(){//ofrece busqueda y abre el archivo seleccionado
+    /**
+     * Ofrece busqueda y abre archivo seleccionado
+     */
+    private void abrir(){
         if(descartar()){
 		
             JFileChooser selector = new JFileChooser();
@@ -207,8 +223,10 @@ public class Ventana {
             }
         }
     }
-    
-    private void guardar(){//sobreescribe el archivo existente
+    /**
+     * Sobreescribe archivo preexisteente
+     */
+    private void guardar(){
         try{
             Scanner texto = new Scanner(area.getText());
             BufferedWriter out = new BufferedWriter(new FileWriter(archivo));
@@ -233,7 +251,10 @@ public class Ventana {
             guardarComo();
         }
     }
-    private void guardarComo(){//crea archivo nuevo y lo guarda
+    /**
+     * Crea archivo nuevo y guarda contenido
+     */
+    private void guardarComo(){
         try{
             JFileChooser selector = new JFileChooser();
             selector.showSaveDialog(window);
@@ -260,9 +281,15 @@ public class Ventana {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+    /**
+     * Provee ajuste de linea al entorno
+     */
     private void setFormat(){
         area.setLineWrap(true);
     }
+    /**
+     * Muestra informacion acerca del soft
+     */
     private void about(){
         String soft = "Bloc de Notas";
         String descripcion = "Realizado en Java por\nPablo Daniel Quiroga\n"
@@ -272,8 +299,10 @@ public class Ventana {
     
     /**
      * pruebas
+     * @param args
      */
-    public static void main(String[] args) {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) {
         Ventana app = new Ventana();
         
     }
