@@ -1,5 +1,7 @@
 package imp;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -15,6 +17,7 @@ import java.io.IOException;
 
 import java.util.Scanner;
 
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -22,6 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
 
 /**
  * Interfaz de Bloc de notas basico
@@ -35,32 +39,35 @@ public class Notepad {
 
 	private JFrame window;
 	private JMenuBar barra;
-	private JMenu menuFile, menuEdit, menuHelp;
+	private JMenu menuFile, menuEdit, menuView, menuHelp;
 	private JMenuItem itNuevo, itAbrir, itSave, itSaveAs, itClose;
 	private JMenuItem itFormat;
+	private JMenuItem itFondo, itFuente;
 	private JMenuItem itAbout;
 	private JScrollPane panel;
 	private static JTextArea area;
-
+	
 	private final String titulo = "Editor de textos";
 	private String nameFile = "";
 	File archivo = null;
-
+	
+	private Font fuente;
+	
 	public Notepad() {
+		fuente = new Font("Arial", Font.PLAIN, 11);
 		initComponents();
 		window.setTitle(titulo);
 		window.setSize(800, 600);
+		window.setResizable(false);
 		window.setVisible(true);
 		window.setLocationRelativeTo(null);
-		window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 	}
 
 	/**
 	 * Metodo para inicializar componentes
 	 */
 	private void initComponents() {
-
-		
 
 		// inicializa los elementos
 		window = new JFrame();
@@ -95,15 +102,24 @@ public class Notepad {
 
 		// añade menus en la barra
 		barra.add(menuFile);
-		barra.add(menuEdit);
+		barra.add(menuEdit);		
+		
+		menuView = new JMenu("Ver");
+		barra.add(menuView);
+		itFondo = new JMenuItem("Fondo");
+		menuView.add(itFondo);
+		itFuente = new JMenuItem("Fuentes");
+		menuView.add(itFuente);
+		
 		barra.add(menuHelp);
 		// añade la barra a la ventana
 		window.setJMenuBar(barra);
 
-		// Crea un area de texto con scroll y lo aÃ±ade a la ventana
+		// Crea un area de texto con scroll y lo añade a la ventana
 		area = new JTextArea();
+		area.setFont(fuente);
 		panel = new JScrollPane(area);
-		window.add(panel);
+		window.getContentPane().add(panel);
 
 		// Gestion de eventos de ventana y menu
 		ManejoDeEventos eventos = new ManejoDeEventos();
@@ -123,6 +139,8 @@ public class Notepad {
 		itSaveAs.addActionListener(eventos);
 		itClose.addActionListener(eventos);
 		itFormat.addActionListener(eventos);
+		itFuente.addActionListener(eventos);
+		itFondo.addActionListener(eventos);
 		itAbout.addActionListener(eventos);
 
 	}
@@ -230,11 +248,27 @@ public class Notepad {
 				String descripcion = "Realizado en Java por\nPablo Daniel Quiroga\n" + "revision 1.1";
 				JOptionPane.showMessageDialog(window, descripcion, soft, JOptionPane.INFORMATION_MESSAGE);
 			}
+			//Provee selector de color para el fondo
+			else if(evt.getSource() == itFondo){
+				Color newcolor = JColorChooser.showDialog(
+													window, 
+													"Seleccione un nuevo fondo", 
+													area.getBackground());
+				if(newcolor != null){
+					area.setBackground(newcolor);
+				}
+			}
+			//Provee selector de fuente
+			else if(evt.getSource() == itFuente){
+				//TODO aun no me toma la nueva fuente
+				FontChooser selector = new FontChooser();
+				fuente = selector.getFuente();
+				area.setFont(fuente);				
+			}
 		}
 
 		/**
 		 * Comprueba contenido y ofrece descartar
-		 * 
 		 * @return boolean
 		 */
 		private boolean descartar() {
@@ -254,4 +288,8 @@ public class Notepad {
 		}
 	}
 
+	//TEST
+	public static void main(String[] args) {
+		Notepad app = new Notepad();
+	}
 }
