@@ -14,27 +14,27 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class FontChooser extends JFrame {
 
 	private JLabel sampleText = new JLabel("Label");
-	private JComboBox<String> fontComboBox;
-	private JComboBox<Integer> sizeComboBox;
-	private JCheckBox boldCheck, italCheck;
+	private static JComboBox<String> fontComboBox;
+	private static JComboBox<Integer> sizeComboBox;
+	private static JCheckBox boldCheck, italCheck;
 	private JButton btnAceptar;
 	private String[] fonts;
 	
-	private Font f;
+	private static Font f;
+	public static boolean bandera = false;
 
 	public FontChooser() {
-		
 		f = new Font("Arial", Font.PLAIN, 12);
 		
 		setTitle("Selector de fuente");
 		setSize(550, 150);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JPanel panelTexto = new JPanel();
 		panelTexto.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -104,19 +104,23 @@ public class FontChooser extends JFrame {
 		btnAceptar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setFuente();
-				dispose();
-				//JOptionPane.showMessageDialog(null, f);
+				cerrar();
 			}
 		});
 		
 	}
-	
+	//Setea fuente en bloc de notas y cierra
+	public void cerrar(){
+		Notepad.setFuente(sampleText.getFont());
+		this.dispose();
+		
+	}
+	//Actualiza la vista de ejemplo
 	public void updateText() {
 		setFuente();
 		sampleText.setFont(f);
 	}
-	
+	//Setea nueva fuente
 	public void setFuente(){
 		String name = (String) fontComboBox.getSelectedItem();
 		Integer size = (Integer) sizeComboBox.getSelectedItem();
@@ -137,25 +141,5 @@ public class FontChooser extends JFrame {
 		f = new Font(name, style, size.intValue());
 	}
 	 
-	public Font getFuente(){
-		return f;
-	}
-
-	/**
-	 * Clase interna para manejar eventos
-	 *
-	private class FontListener implements ActionListener {
-		
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btnAceptar) {
-				f = setFuente();
-				dispose();
-			} else {
-				updateText();
-			}
-		}
-		
-		
-	}*/
-
+	
 }

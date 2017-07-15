@@ -49,12 +49,11 @@ public class Notepad {
 	
 	private final String titulo = "Editor de textos";
 	private String nameFile = "";
-	File archivo = null;
+	private File archivo = null;
 	
-	private Font fuente;
+	private static Font fuente = null;
 	
-	public Notepad() {
-		fuente = new Font("Arial", Font.PLAIN, 11);
+	public Notepad() {		
 		initComponents();
 		window.setTitle(titulo);
 		window.setSize(800, 600);
@@ -117,7 +116,7 @@ public class Notepad {
 
 		// Crea un area de texto con scroll y lo añade a la ventana
 		area = new JTextArea();
-		area.setFont(fuente);
+		//area.setFont(fuente);
 		panel = new JScrollPane(area);
 		window.getContentPane().add(panel);
 
@@ -260,10 +259,8 @@ public class Notepad {
 			}
 			//Provee selector de fuente
 			else if(evt.getSource() == itFuente){
-				//TODO aun no me toma la nueva fuente
-				FontChooser selector = new FontChooser();
-				fuente = selector.getFuente();
-				area.setFont(fuente);				
+				@SuppressWarnings("unused")
+				FontChooser selecFont = new FontChooser();
 			}
 		}
 
@@ -288,8 +285,13 @@ public class Notepad {
 		}
 	}
 
-	//TEST
+	public static void setFuente(Font x){
+		fuente = x;
+		area.setFont(fuente);
+	}
+	
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		Notepad app = new Notepad();
 	}
 }
